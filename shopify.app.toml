@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "9324bd51addc6929875fed517ac9a709"
-application_url = "https://coast-reputation-drug-army.trycloudflare.com"
+application_url = "https://dista-app.onrender.com"
 embedded = true
 name = "rvp"
 handle = "rvp-4"
@@ -23,9 +23,9 @@ scopes = "write_products, read_products, read_orders, read_customers, read_check
 
 [auth]
 redirect_urls = [
-  "https://coast-reputation-drug-army.trycloudflare.com/auth/callback",
-  "https://coast-reputation-drug-army.trycloudflare.com/auth/shopify/callback",
-  "https://coast-reputation-drug-army.trycloudflare.com/api/auth/callback"
+  "https://dista-app.onrender.com/auth/callback",
+  "https://dista-app.onrender.com/auth/shopify/callback",
+  "https://dista-app.onrender.com/api/auth/callback"
 ]
 
 [pos]
