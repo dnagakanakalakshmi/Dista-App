@@ -1,10 +1,18 @@
+
 window.CurrencyUtils = {
     formatMoneyCurrency(cents, format) {
+
         if (typeof cents === 'string') cents = cents.replace('.', '');
         let value = '';
         const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
-        const formatString = format || window.money_format;
-
+        const formatString = format || window.money_format || "${{amount}}";
+        
+        const match = formatString.match(placeholderRegex);
+        if (!match) {
+            // fallback to a default format if no placeholder is found
+            return (parseFloat(cents) / 100).toFixed(2);
+        }
+        
         function defaultOption(opt, def) {
         return (typeof opt === 'undefined' ? def : opt);
         }
@@ -24,7 +32,7 @@ window.CurrencyUtils = {
         return dollars + cents;
         }
 
-        switch(formatString.match(placeholderRegex)[1]) {
+        switch(match[1]) {
         case 'amount':
             value = formatWithDelimiters(cents, 2);
             break;

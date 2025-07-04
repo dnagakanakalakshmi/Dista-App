@@ -60,7 +60,10 @@
     </script>
   </template>
 
-  <script src="{{ 'currency.js' | asset_url }}" async></script>
+  <script>
+    window.money_format = "{{ shop.money_with_currency_format }}";
+  </script>
+  <script src="{{ 'currency.js' | asset_url }}" defer></script>
 
   <script>
     // Utility Functions
@@ -341,8 +344,6 @@
       static async init() {
         if (!{{ customer.id }}) return;
         
-        window.money_format = "{{ shop.money_with_currency_format }}";
-        
         const controller = new RecentlyOrderedController();
         await controller.setup();
       }
@@ -373,7 +374,7 @@
           this.setupShowMore();
         } catch (error) {
           console.error('Recently Ordered Products Error:', error);
-          this.container.innerHTML = '<p class="error-message">Failed to load products. Please refresh the page.</p>';
+          this.container.innerHTML = '<p class="error-message">Faileeeeed to load products. Please refresh the page.</p>';
         }
       }
       
@@ -440,6 +441,7 @@
       }
       
       renderInitialProducts() {
+
         const targetContainer = this.settings.displayMode === 'carousel' ? this.carousel : this.grid;
         targetContainer.innerHTML = ''; // Clear the container
 
