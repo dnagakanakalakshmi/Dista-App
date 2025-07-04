@@ -1,0 +1,37 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "9324bd51addc6929875fed517ac9a709"
+application_url = "https://coast-reputation-drug-army.trycloudflare.com"
+embedded = true
+name = "rvp"
+handle = "rvp-4"
+
+[webhooks]
+api_version = "2025-04"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
+  [[webhooks.subscriptions]]
+  topics = [ "app/scopes_update" ]
+  uri = "/webhooks/app/scopes_update"
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "write_products, read_products, read_orders, read_customers, read_checkouts, write_checkouts, read_validations, write_validations, read_translations, read_payment_customizations, write_payment_customizations"
+
+[auth]
+redirect_urls = [
+  "https://coast-reputation-drug-army.trycloudflare.com/auth/callback",
+  "https://coast-reputation-drug-army.trycloudflare.com/auth/shopify/callback",
+  "https://coast-reputation-drug-army.trycloudflare.com/api/auth/callback"
+]
+
+[pos]
+embedded = false
+
+[build]
+include_config_on_deploy = true
+dev_store_url = "distaxstaging.myshopify.com"
+automatically_update_urls_on_dev = true
