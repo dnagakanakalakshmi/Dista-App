@@ -58,6 +58,7 @@ export const action = async ({ request }) => {
   const actionType = formData.get("actionType");
   const functionId = formData.get("functionId");
   const funId = "c1650c84-69d5-47ba-ab62-0fb3a8c6e260";
+  const payId = "aa5d5876-dd86-4bef-ab76-6dacd623e88b";
 
   if (actionType === "toggleEnabled") {
     const enabled = formData.get("enabled") === "true";
@@ -99,6 +100,27 @@ export const action = async ({ request }) => {
     const validationEdge = existingValidationsJson.data.validations.edges.find(
       edge => edge.node.shopifyFunction.id === funId
     );
+
+ const paymentCustomizationQuery = `
+  query {
+  paymentCustomizations(first: 10) {
+    edges {
+      node {
+        id
+        title
+        enabled
+        functionId
+      }
+    }
+  }
+}
+`;
+const paymentCustomizationsResp = await admin.graphql(paymentCustomizationQuery);
+const paymentCustomizationsData = await paymentCustomizationsResp.json();
+const paymentCustomization = paymentCustomizationsData.data.paymentCustomizations.edges.find(
+  edge => edge.node.functionId === payId
+)?.node;
+   
     if (enabled) {
       if (!validationEdge) {
         const createValidationMutation = `
@@ -148,6 +170,36 @@ export const action = async ({ request }) => {
         `;
         await admin.graphql(enableMutation);
       }
+      if (!paymentCustomization) {
+    // Create new
+    const createPaymentCustomizationMutation = `
+      mutation {
+        paymentCustomizationCreate(paymentCustomization: {
+          title: "Hide payment method by cart total",
+          enabled: true,
+          functionId: "${payId}"
+        }) {
+          paymentCustomization { id enabled }
+          userErrors { message }
+        }
+      }
+    `;
+    await admin.graphql(createPaymentCustomizationMutation);
+  } else {
+    // Enable existing
+    const enablePaymentCustomizationMutation = `
+      mutation {
+        paymentCustomizationUpdate(
+          id: "${paymentCustomization}",
+          paymentCustomization: { enabled: true }
+        ) {
+          paymentCustomization { id enabled }
+          userErrors { message }
+        }
+      }
+    `;
+    await admin.graphql(enablePaymentCustomizationMutation);
+  }
     } else {
       if (validationEdge && validationEdge.node.enabled) {
         const disableMutation = `
@@ -170,6 +222,21 @@ export const action = async ({ request }) => {
         `;
         await admin.graphql(disableMutation);
       }
+      // Disable if exists
+  if (paymentCustomization) {
+    const disablePaymentCustomizationMutation = `
+      mutation {
+        paymentCustomizationUpdate(
+          id: "${paymentCustomization}",
+          paymentCustomization: { enabled: false }
+        ) {
+          paymentCustomization { id enabled }
+          userErrors { message }
+        }
+      }
+    `;
+    await admin.graphql(disablePaymentCustomizationMutation);
+    }
     }
     return json({ enabled });
   }
