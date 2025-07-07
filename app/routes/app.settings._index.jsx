@@ -119,7 +119,7 @@ const paymentCustomizationsResp = await admin.graphql(paymentCustomizationQuery)
 const paymentCustomizationsData = await paymentCustomizationsResp.json();
 const paymentCustomization = paymentCustomizationsData.data.paymentCustomizations.edges.find(
   edge => edge.node.functionId === payId
-)?.node;
+);
    
     if (enabled) {
       if (!validationEdge) {
