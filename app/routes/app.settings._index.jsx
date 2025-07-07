@@ -190,7 +190,7 @@ const paymentCustomization = paymentCustomizationsData.data.paymentCustomization
     const enablePaymentCustomizationMutation = `
       mutation {
         paymentCustomizationUpdate(
-          id: "${paymentCustomization}",
+          id: "${paymentCustomization.node.id}",
           paymentCustomization: { enabled: true }
         ) {
           paymentCustomization { id enabled }
@@ -227,7 +227,7 @@ const paymentCustomization = paymentCustomizationsData.data.paymentCustomization
     const disablePaymentCustomizationMutation = `
       mutation {
         paymentCustomizationUpdate(
-          id: "${paymentCustomization}",
+          id: "${paymentCustomization.node.id}",
           paymentCustomization: { enabled: false }
         ) {
           paymentCustomization { id enabled }
