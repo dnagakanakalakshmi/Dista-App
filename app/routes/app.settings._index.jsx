@@ -343,9 +343,11 @@ export default function FunctionsList() {
   const fetcher = useFetcher();
   useEffect(() => {
     if (typeof fetcher.data?.enabled === "boolean") setIsEnabled(fetcher.data.enabled);
-  }, [fetcher.data]);
+    if (fetcher.state === "idle" && fetcher.data) setLoading(false);
+  }, [fetcher.data, fetcher.state]);
 
   const handleToggleEnabled = (checked) => {
+    setLoading(true);
     fetcher.submit(
       {
         actionType: "toggleEnabled",
