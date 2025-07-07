@@ -462,9 +462,7 @@
     }
   });
 
-  // Start observing all divs in the document
-const minicartEntries = document.querySelector('.minicart__entries');
-if (minicartEntries) {
+  const minicartEntries = document.querySelector('.minicart__entries');
   if (minicartEntries) {
     observer.observe(minicartEntries, { attributes: true, attributeFilter: ['data-last-update'] });
   }
