@@ -8,6 +8,7 @@ import { json } from "@remix-run/node";
 export const loader = async ({ request }) => {
   const { admin } = await authenticate.admin(request);
 
+  // Query for shop, metafields, and rules
   const response = await admin.graphql(`
     query {
       shop {
@@ -40,10 +41,59 @@ export const loader = async ({ request }) => {
     functions = [];
   }
 
+  // --- New logic: check for rules existence ---
+  const funId = "c1650c84-69d5-47ba-ab62-0fb3a8c6e260";
+  const payId = "aa5d5876-dd86-4bef-ab76-6dacd623e88b";
+
+  // Query validations
+  const validationsResp = await admin.graphql(`
+    query {
+      validations(first: 100) {
+        edges {
+          node {
+            id
+            enabled
+            shopifyFunction { id }
+          }
+        }
+      }
+    }
+  `);
+  const validationsJson = await validationsResp.json();
+  const validationEdge = validationsJson.data.validations.edges.find(
+    edge => edge.node.shopifyFunction.id === funId
+  );
+
+  // Query payment customizations
+  const paymentCustomizationsResp = await admin.graphql(`
+    query {
+      paymentCustomizations(first: 10) {
+        edges {
+          node {
+            id
+            enabled
+            functionId
+          }
+        }
+      }
+    }
+  `);
+  const paymentCustomizationsJson = await paymentCustomizationsResp.json();
+  const paymentCustomization = paymentCustomizationsJson.data.paymentCustomizations.edges.find(
+    edge => edge.node.functionId === payId
+  );
+
+  // Only enabled if metafield is 'true' AND both rules exist and are enabled
+  const metafieldEnabled = shop.enabledMetafield?.value === "true";
+  const rulesEnabled =
+    validationEdge?.node?.enabled === true &&
+    paymentCustomization?.node?.enabled === true;
+  const enabled = metafieldEnabled && rulesEnabled;
+
   return json({
     currency: shop.currencyCode,
     functions: functions || [],
-    enabled: shop.enabledMetafield?.value === "true",  // Return the parsed array
+    enabled,
     // ... other data
   }, {
     headers: {
