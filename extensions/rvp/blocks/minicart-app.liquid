@@ -463,9 +463,11 @@
   });
 
   // Start observing all divs in the document
-  document.querySelectorAll('div').forEach(div => {
-    observer.observe(div, { attributes: true, attributeFilter: ['data-last-update'] });
-  });
+const minicartEntries = document.querySelector('.minicart__entries');
+if (minicartEntries) {
+  if (minicartEntries) {
+    observer.observe(minicartEntries, { attributes: true, attributeFilter: ['data-last-update'] });
+  }
 
   function getVisibleMinicartEntries() {
     const entries = Array.from(document.querySelectorAll('.minicart__entries'));
