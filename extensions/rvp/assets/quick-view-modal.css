@@ -112,7 +112,7 @@
   transition: background 0.2s, color 0.2s;
 }
 .rvp-back-to-shop::before {
-  content: "\ebb4";
+  content: "←";
   font-family: "unicons-line";
   display: inline-block;
 }
