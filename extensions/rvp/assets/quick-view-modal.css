@@ -113,7 +113,7 @@
 }
 .rvp-back-to-shop::before {
   content: "←";
-  font-family: "unicons-line";
+  font-family: "unicons-line",sans-serif;
   display: inline-block;
 }
 .rvp-back-to-shop:hover {
