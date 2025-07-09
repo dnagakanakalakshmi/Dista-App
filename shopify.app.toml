@@ -3,8 +3,8 @@
 client_id = "9324bd51addc6929875fed517ac9a709"
 application_url = "https://dista-app.onrender.com"
 embedded = true
-name = "rvp"
-handle = "rvp-4"
+name = "Dista App"
+handle = "dista-app"
 
 [webhooks]
 api_version = "2025-04"
