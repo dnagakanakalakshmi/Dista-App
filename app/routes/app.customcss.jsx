@@ -112,50 +112,67 @@ export default function CustomCSSAdmin() {
 
   const cssGuide = {
     productCard: [
-      '.recently-viewed-card - Main container for each product card',
-      '.recently-viewed-card--horizontal - Horizontal layout for product card',
-      '.recently-viewed-image-wrapper - Container for product image',
-      '.recently-viewed-image-link - Link wrapping the product image',
-      '.recently-viewed-image - Product image element',
-      '.recently-viewed-badge - Sale/offer badge',
-      '.recently-viewed-details - Container for product details',
-      '.recently-viewed-title - Product title',
-      '.recently-viewed-reviews - Container for star ratings',
-      '.recently-viewed-stars - Star rating display',
-      '.recently-viewed-review-count - Number of reviews',
-      '.recently-viewed-price-wrapper - Container for price',
-      '.recently-viewed-price - Current price',
-      '.recently-viewed-compare-price - Original/compare price',
-      '.recently-viewed-button-container - Container for buttons',
-      '.recently-viewed-atc-button - Add to Cart button',
-      '.recently-viewed-atc-button-text - Text inside Add to Cart button',
-      '.recently-viewed-buy-now-form - Form for Buy Now functionality',
-      '.recently-viewed-buy-now-button - Buy Now button',
-      '.recently-viewed-buynow-button-text - Text inside Buy Now button'
+      '.recently-viewed-card – Main container for each product card',
+      '.recently-viewed-card--horizontal – Horizontal layout for product card',
+      '.recently-viewed-image-wrapper – Container for product image',
+      '.recently-viewed-image-link – Link wrapping the product image',
+      '.recently-viewed-image – Product image element',
+      '.recently-viewed-badge – Sale/offer badge',
+      '.recently-viewed-details – Container for product details',
+      '.recently-viewed-title – Product title',
+      '.recently-viewed-title-minicart – Product title in minicart',
+      '.recently-viewed-reviews-link – Link wrapping the reviews section',
+      '.recently-viewed-reviews – Container for star ratings',
+      '.recently-viewed-stars – Star rating display',
+      '.recently-viewed-review-count – Number of reviews',
+      '.recently-viewed-price-wrapper – Container for price',
+      '.recently-viewed-price – Current price',
+      '.recently-viewed-compare-price – Original/compare price',
+      '.recently-viewed-button-container – Container for buttons',
+      '.recently-viewed-atc-button – Add to Cart button',
+      '.recently-viewed-atc-button-text – Text inside Add to Cart button',
+      '.recently-viewed-buy-now-form – Form for Buy Now functionality',
+      '.recently-viewed-buy-now-button – Buy Now button',
+      '.recently-viewed-buy-now-button-text – Text inside Buy Now button',
+      '.recently-viewed-buy-now-icon – Icon inside Buy Now button',
     ],
     carousel: [
-      '.recently-viewed-container - Main container',
-      '.recently-viewed-carousel-wrapper - Carousel container',
-      '.recently-viewed-carousel - Carousel track',
-      '.recently-viewed-carousel-prev - Previous button',
-      '.recently-viewed-carousel-next - Next button'
+      '.recently-viewed-container – Main container',
+      '.recently-viewed-carousel-wrapper – Carousel container',
+      '.recently-viewed-carousel – Carousel track',
+      '.recently-viewed-carousel-prev – Previous button',
+      '.recently-viewed-carousel-next – Next button',
+      '.recently-viewed-carousel--minicart – Carousel for minicart',
+      '.recently-viewed-carousel-wrapper--minicart – Carousel wrapper for minicart',
     ],
     grid: [
-      '.recently-viewed-grid - Grid container',
-      '.recently-viewed-show-more-container - Show more button container',
-      '.recently-viewed-show-more-button - Show more button'
+      '.recently-viewed-grid – Grid container',
+      '.recently-viewed-show-more-container – Show more button container',
+      '.recently-viewed-show-more-button – Show more button',
+    ],
+    minicart: [
+      '.recently-viewed-carousel--minicart .recently-viewed-card – Minicart product card',
+      '.recently-viewed-carousel--minicart .recently-viewed-card--horizontal – Minicart horizontal card',
+      '.recently-viewed-carousel--minicart .recently-viewed-image-wrapper – Minicart image wrapper',
+      '.recently-viewed-carousel--minicart .recently-viewed-details – Minicart details',
+      '.recently-viewed-carousel--minicart .recently-viewed-title-minicart – Minicart product title',
+      '.recently-viewed-carousel--minicart .recently-viewed-price – Minicart price',
+      '.recently-viewed-carousel--minicart .recently-viewed-compare-price – Minicart compare price',
+      '.recently-viewed-carousel--minicart .recently-viewed-badge – Minicart badge',
+      '.recently-viewed-carousel--minicart .recently-viewed-stars – Minicart stars',
+      '.recently-viewed-carousel--minicart .recently-viewed-review-count – Minicart review count',
     ],
     variables: [
-      '--rv-primary - Primary color (default: #0066cc)',
-      '--rv-buynow - Buy Now button color (default: #4caf50)',
-      '--rv-badge - Badge color (default: #e7ac17)',
-      '--rv-border - Border color (default: #e1e1e1)',
-      '--rv-text - Text color (default: #333)',
-      '--rv-star-filled - Filled star color (default: #ffb400)',
-      '--rv-star-empty - Empty star color (default: #e1e1e1)'
+      '--rv-primary – Primary color (default: #0066cc)',
+      '--rv-buynow – Buy Now button color (default: #4caf50)',
+      '--rv-badge – Badge color (default: #e7ac17)',
+      '--rv-border – Border color (default: #e1e1e1)',
+      '--rv-text – Text color (default: #333)',
+      '--rv-star-filled – Filled star color (default: #ffb400)',
+      '--rv-star-empty – Empty star color (default: #e1e1e1)'
     ],
     headings: [
-      '.rvp-heading - Heading for Recently Viewed Products section'
+      '.rvp-heading – Heading for Recently Viewed Products section'
     ]
   };
 
@@ -331,6 +348,15 @@ export default function CustomCSSAdmin() {
                       <List type="bullet">
                         {cssGuide.grid.map((item, index) => (
                           <List.Item key={`grid-${index}`}>{item}</List.Item>
+                        ))}
+                      </List>
+                    </div>
+
+                    <div style={{ marginTop: '20px' }}>
+                      <Text variant="headingSm" as="h3">Minicart Classes</Text>
+                      <List type="bullet">
+                        {cssGuide.minicart.map((item, index) => (
+                          <List.Item key={`minicart-${index}`}>{item}</List.Item>
                         ))}
                       </List>
                     </div>

@@ -168,7 +168,7 @@ export default function AdminSettings() {
     );
 
     return (
-        <Page title="Widget Settings">
+        <Page title="Product Card Text Customization">
             <Layout>
                 <Layout.Section>
                     <Box paddingBlockEnd="400" />
@@ -177,9 +177,12 @@ export default function AdminSettings() {
                         <Card>
                             <BlockStack gap="400">
                                 <InlineStack align="space-between">
-                                    <Text variant="headingMd" as="h2">Stars</Text>
+                                    <Text variant="headingMd" as="h2">Reviews Text</Text>
                                     <Button onClick={() => setActiveModal('stars')}>Edit</Button>
                                 </InlineStack>
+                                <Text variant="bodySm" as="p" color="subdued" style={{ marginTop: 8 }}>
+                                    Customize how the number of reviews appears on your product cards. Use <b>{'{count}'}</b> as a placeholder for the review count (e.g., "97 reviews").
+                                </Text>
                                 <Box padding="400" background="bg-surface-secondary" minWidth="320px">
                                     <InlineStack gap="200" align="center">
                                         <div style={{ display: 'flex', gap: 4 }}>
@@ -196,9 +199,12 @@ export default function AdminSettings() {
                         <Card>
                             <BlockStack gap="400">
                                 <InlineStack align="space-between">
-                                    <Text variant="headingMd" as="h2">Save</Text>
+                                    <Text variant="headingMd" as="h2">Discount Badge Text</Text>
                                     <Button onClick={() => setActiveModal('save')}>Edit</Button>
                                 </InlineStack>
+                                <Text variant="bodySm" as="p" color="subdued" style={{ marginTop: 8 }}>
+                                    Customize the discount badge text shown on your product cards. Use <b>{'{percent}'}</b> as a placeholder for the discount percentage (e.g., "Save 30%").
+                                </Text>
                                 <Box padding="400" background="bg-surface-secondary" minWidth="320px">
                                     {getStyledSavePreview(saveText)}
                                 </Box>

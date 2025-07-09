@@ -109,51 +109,51 @@ export default function CustomCSSAdmin() {
 
   const cssGuide = {
     productCard: [
-      '.recently-ordered-card - Main container for each product card',
-      '.recently-ordered-card--horizontal - Horizontal layout for product card',
-      '.recently-ordered-image-wrapper - Container for product image',
-      '.recently-ordered-image-link - Link wrapping the product image',
-      '.recently-ordered-image - Product image element',
-      '.recently-ordered-badge - Sale/offer badge',
-      '.recently-ordered-details - Container for product details',
-      '.recently-ordered-title - Product title',
-      '.recently-ordered-reviews - Container for star ratings',
-      '.recently-ordered-stars - Star rating display',
-      '.recently-ordered-review-count - Number of reviews',
-      '.recently-ordered-price-wrapper - Container for price',
-      '.recently-ordered-price - Current price',
-      '.recently-ordered-compare-price - Original/compare price',
-      '.recently-ordered-button-container - Container for buttons',
-      '.recently-ordered-atc-button - Add to Cart button',
-      '.recently-ordered-atc-button-text - Text inside Add to Cart button',
-      '.recently-ordered-reorder-form - Form for Reorder functionality',
-      '.recently-ordered-reorder-button - Reorder button',
-      '.recently-ordered-reorder-button-text - Text inside Reorder button',
-      '.recently-ordered-sale-tag - Sale percentage tag'
+      '.recently-ordered-card – Main container for each product card',
+      '.recently-ordered-card--horizontal – Horizontal layout for product card',
+      '.recently-ordered-image-wrapper – Container for product image',
+      '.recently-ordered-image-link – Link wrapping the product image',
+      '.recently-ordered-image – Product image element',
+      '.recently-ordered-badge – Sale/offer badge',
+      '.recently-ordered-sale-tag – Sale percentage tag',
+      '.recently-ordered-details – Container for product details',
+      '.recently-ordered-title – Product title',
+      '.recently-ordered-reviews-link – Link wrapping the reviews section',
+      '.recently-ordered-reviews – Container for star ratings',
+      '.recently-ordered-stars – Star rating display',
+      '.recently-ordered-review-count – Number of reviews',
+      '.recently-ordered-price-wrapper – Container for price',
+      '.recently-ordered-price – Current price',
+      '.recently-ordered-compare-price – Original/compare price',
+      '.recently-ordered-button-container – Container for buttons',
+      '.recently-ordered-atc-button – Add to Cart button',
+      '.recently-ordered-atc-button-text – Text inside Add to Cart button',
+      '.recently-ordered-reorder-button – Reorder button',
+      '.recently-ordered-reorder-button-text – Text inside Reorder button',
     ],
     carousel: [
-      '.recently-ordered-container - Main container',
-      '.recently-ordered-carousel-wrapper - Carousel container',
-      '.recently-ordered-carousel - Carousel track',
-      '.recently-ordered-carousel-prev - Previous button',
-      '.recently-ordered-carousel-next - Next button'
+      '.recently-ordered-container – Main container',
+      '.recently-ordered-carousel-wrapper – Carousel container',
+      '.recently-ordered-carousel – Carousel track',
+      '.recently-ordered-carousel-prev – Previous button',
+      '.recently-ordered-carousel-next – Next button',
     ],
     grid: [
-      '.recently-ordered-grid - Grid container',
-      '.recently-ordered-show-more-container - Show more button container',
-      '.recently-ordered-show-more-button - Show more button'
+      '.recently-ordered-grid – Grid container',
+      '.recently-ordered-show-more-container – Show more button container',
+      '.recently-ordered-show-more-button – Show more button',
     ],
     variables: [
-      '--ro-primary - Primary color (default: #0066cc)',
-      '--ro-reorder - Reorder button color (default: #4caf50)',
-      '--ro-badge - Badge color (default: #e7ac17)',
-      '--ro-border - Border color (default: #e1e1e1)',
-      '--ro-text - Text color (default: #333)',
-      '--ro-star-filled - Filled star color (default: #ffb400)',
-      '--ro-star-empty - Empty star color (default: #e1e1e1)'
+      '--ro-primary – Primary color (default: #0066cc)',
+      '--ro-reorder – Reorder button color (default: #4caf50)',
+      '--ro-badge – Badge color (default: #e7ac17)',
+      '--ro-border – Border color (default: #e1e1e1)',
+      '--ro-text – Text color (default: #333)',
+      '--ro-star-filled – Filled star color (default: #ffb400)',
+      '--ro-star-empty – Empty star color (default: #e1e1e1)'
     ],
     headings: [
-      '.ro-heading - Heading for Recently Ordered Products section'
+      '.ro-heading – Heading for Recently Ordered Products section'
     ]
   };
 
