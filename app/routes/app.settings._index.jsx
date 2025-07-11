@@ -1,6 +1,6 @@
 // app.settings._index.jsx
 import { Link, useLoaderData, useFetcher } from "@remix-run/react";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Card, Text, List, Button, BlockStack, IndexTable, Tag, Checkbox, Spinner } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import { json } from "@remix-run/node";
@@ -8,7 +8,6 @@ import { json } from "@remix-run/node";
 export const loader = async ({ request }) => {
   const { admin } = await authenticate.admin(request);
 
-  // Query for shop, metafields, and rules
   const response = await admin.graphql(`
     query {
       shop {
@@ -291,16 +290,12 @@ export default function FunctionsList() {
   const functions = Array.isArray(loaderData?.functions) ? loaderData.functions : [];
   const [isEnabled, setIsEnabled] = useState(loaderData.enabled);
   const [loading, setLoading] = useState(false);
-  const [addLoading, setAddLoading] = useState(false);
   const fetcher = useFetcher();
-  const addButtonRef = useRef();
   useEffect(() => {
     if (typeof fetcher.data?.enabled === "boolean") setIsEnabled(fetcher.data.enabled);
-    if (fetcher.state === "idle" && fetcher.data) setLoading(false);
-  }, [fetcher.data, fetcher.state]);
+  }, [fetcher.data]);
 
   const handleToggleEnabled = (checked) => {
-    setLoading(true);
     fetcher.submit(
       {
         actionType: "toggleEnabled",
@@ -312,7 +307,7 @@ export default function FunctionsList() {
 
   return (
     <div style={{ margin: '32px', position: 'relative' }}>
-      {(loading || addLoading) && (
+      {loading && (
         <div style={{
           position: 'absolute',
           top: 0,
@@ -332,7 +327,7 @@ export default function FunctionsList() {
         <BlockStack gap="400">
           {/* Title and Enable Checkout Rule checkbox in one row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
-            <Text as="h2" variant="headingMd">Checkout Validations</Text>
+            <Text as="h2" variant="headingMd">Validation Functions</Text>
             <Checkbox
               label="Enable Checkout Rule"
               checked={isEnabled}
@@ -342,33 +337,7 @@ export default function FunctionsList() {
           </div>
 
           {functions.length === 0 ? (
-            <>
-              <Card sectioned>
-                <Text as="h3" variant="headingSm" style={{ marginBottom: 8 }}>
-                  What are Checkout Validations?
-                </Text>
-                <Text as="p" color="subdued" style={{ marginBottom: 12 }}>
-                  Checkout Validations let you create custom rules for your Shopify store's checkout process. You can:
-                  <ul style={{ margin: '8px 0 8px 24px', padding: 0 }}>
-                    <li>Fix a minimum cart value to place an order</li>
-                    <li>Set a maximum number of items per order</li>
-                    <li>Restrict or hide payment methods based on country, zip code, or cart value</li>
-                  </ul>
-                  <br />
-                  To get started, click <b>Add Function</b> below and define your first validation rule. Each function can have one or more conditions, and you can enable or disable them at any time.
-                </Text>
-              </Card>
-              <Button
-                ref={addButtonRef}
-                primary
-                style={{ marginTop: 24 }}
-                disabled={addLoading}
-                url="new"
-                onClick={() => setAddLoading(true)}
-              >
-                {addLoading ? <Spinner size="small" /> : 'Add Function'}
-              </Button>
-            </>
+            <Text as="p">No functions created yet. Click "Add Function" to create one.</Text>
           ) : (
             <IndexTable
               itemCount={functions.length}
@@ -459,9 +428,8 @@ export default function FunctionsList() {
                           }}
                           submit
                           size="slim"
-                          disabled={fetcher.state === 'submitting'}
                         >
-                          {fetcher.state === 'submitting' ? <Spinner size="small" /> : 'Delete'}
+                          Delete
                         </Button>
                       </fetcher.Form>
                     </div>
@@ -471,16 +439,9 @@ export default function FunctionsList() {
             </IndexTable>
           )}
 
-          {functions.length > 0 && (
-            <Button
-              primary
-              url="new"
-              onClick={() => setAddLoading(true)}
-              disabled={addLoading}
-            >
-              {addLoading ? <Spinner size="small" /> : 'Add Function'}
-            </Button>
-          )}
+          <Button url="new" primary>
+            Add Function
+          </Button>
         </BlockStack>
       </Card>
     </div>
