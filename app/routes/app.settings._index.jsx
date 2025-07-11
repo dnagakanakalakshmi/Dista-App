@@ -323,6 +323,21 @@ export default function FunctionsList() {
           <Spinner accessibilityLabel="Loading function" size="large" />
         </div>
       )}
+      <Card sectioned>
+        <Text as="h3" variant="headingSm" style={{ marginBottom: 8 }}>
+          What are Checkout Validations?
+        </Text>
+        <Text as="p" color="subdued" style={{ marginBottom: 12 }}>
+          Checkout Validations let you create custom rules for your Shopify store's checkout process. You can:
+          <ul style={{ margin: '8px 0 8px 24px', padding: 0 }}>
+            <li>Fix a minimum cart value to place an order</li>
+            <li>Set a maximum number of items per order</li>
+            <li>Restrict or hide payment methods based on country, zip code, or cart value</li>
+          </ul>
+          <br />
+          To get started, click <b>Add Function</b> below and define your first validation rule. Each function can have one or more conditions, and you can enable or disable them at any time.
+        </Text>
+      </Card>
       <Card>
         <BlockStack gap="400">
           {/* Title and Enable Checkout Rule checkbox in one row */}

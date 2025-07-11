@@ -6,20 +6,25 @@ embedded = true
 name = "Dista App - Rajah Ayurveda"
 handle = "dista-app-rajah-ayurveda"
 
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "distaxstaging.myshopify.com"
+include_config_on_deploy = true
+
 [webhooks]
 api_version = "2025-07"
-
-  [[webhooks.subscriptions]]
-  topics = [ "app/uninstalled" ]
-  uri = "/webhooks/app/uninstalled"
 
   [[webhooks.subscriptions]]
   topics = [ "app/scopes_update" ]
   uri = "/webhooks/app/scopes_update"
 
+  [[webhooks.subscriptions]]
+  topics = [ "app/uninstalled" ]
+  uri = "/webhooks/app/uninstalled"
+
 [access_scopes]
 # Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
-scopes = "write_products, read_products, read_orders, read_all_orders, read_customers, read_checkouts, write_checkouts, read_validations, write_validations, read_translations, read_payment_customizations, write_payment_customizations"
+scopes = "read_all_orders,read_checkouts,read_customers,read_orders,read_payment_customizations,read_products,read_translations,read_validations,write_checkouts,write_payment_customizations,write_products,write_validations"
 
 [auth]
 redirect_urls = [
@@ -35,8 +40,3 @@ prefix = "a"
 
 [pos]
 embedded = false
-
-[build]
-dev_store_url = "distaxstaging.myshopify.com"
-automatically_update_urls_on_dev = true
-include_config_on_deploy = true
