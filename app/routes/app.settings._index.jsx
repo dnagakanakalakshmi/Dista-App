@@ -41,59 +41,10 @@ export const loader = async ({ request }) => {
     functions = [];
   }
 
-  // --- New logic: check for rules existence ---
-  const funId = "8814cf17-072c-48f7-b7e3-01fe3388f7c7";
-  const payId = "d8775fe2-9295-432d-8c72-167cac4e5ef3";
-
-  // Query validations
-  const validationsResp = await admin.graphql(`
-    query {
-      validations(first: 100) {
-        edges {
-          node {
-            id
-            enabled
-            shopifyFunction { id }
-          }
-        }
-      }
-    }
-  `);
-  const validationsJson = await validationsResp.json();
-  const validationEdge = validationsJson.data.validations.edges.find(
-    edge => edge.node.shopifyFunction.id === funId
-  );
-
-  // Query payment customizations
-  const paymentCustomizationsResp = await admin.graphql(`
-    query {
-      paymentCustomizations(first: 10) {
-        edges {
-          node {
-            id
-            enabled
-            functionId
-          }
-        }
-      }
-    }
-  `);
-  const paymentCustomizationsJson = await paymentCustomizationsResp.json();
-  const paymentCustomization = paymentCustomizationsJson.data.paymentCustomizations.edges.find(
-    edge => edge.node.functionId === payId
-  );
-
-  // Only enabled if metafield is 'true' AND both rules exist and are enabled
-  const metafieldEnabled = shop.enabledMetafield?.value === "true";
-  const rulesEnabled =
-    validationEdge?.node?.enabled === true &&
-    paymentCustomization?.node?.enabled === true;
-  const enabled = metafieldEnabled && rulesEnabled;
-
   return json({
     currency: shop.currencyCode,
     functions: functions || [],
-    enabled,
+    enabled: shop.enabledMetafield?.value === "true",  // Return the parsed array
     // ... other data
   }, {
     headers: {
