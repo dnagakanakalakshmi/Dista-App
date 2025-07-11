@@ -3,8 +3,8 @@
 client_id = "cbbfca2fd390e3b6ac9963cef2e9aa51"
 application_url = "https://dista-app.onrender.com"
 embedded = true
-name = "Dista App"
-handle = "dista-app-1"
+name = "Dista App - Rajah Ayurveda"
+handle = "dista-app-rajah-ayurveda"
 
 [webhooks]
 api_version = "2025-07"
