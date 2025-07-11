@@ -57,8 +57,8 @@ export const action = async ({ request }) => {
   const formData = await request.formData();
   const actionType = formData.get("actionType");
   const functionId = formData.get("functionId");
-  const funId = "8814cf17-072c-48f7-b7e3-01fe3388f7c7";
-  const payId = "d8775fe2-9295-432d-8c72-167cac4e5ef3";
+  const funId = "c1650c84-69d5-47ba-ab62-0fb3a8c6e260";
+  const payId = "aa5d5876-dd86-4bef-ab76-6dacd623e88b";
 
   if (actionType === "toggleEnabled") {
     const enabled = formData.get("enabled") === "true";
