@@ -380,7 +380,7 @@
       
       async fetchProducts() {
         const currency = this.container.dataset.currency;
-        const storeUrl = '{{ shop.url }}';
+        const storeUrl = '{{ shop.permanent_domain }}';
         const response = await fetch(`/a/rvpp/app/apishopifyRO?customerId={{ customer.id }}&uid={{ uid }}&storeUrl=${storeUrl}&currency=${currency}`);
         const { products, settings, widgetSettings } = await response.json();
         

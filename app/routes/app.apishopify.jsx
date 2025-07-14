@@ -55,10 +55,11 @@ export const action = async ({ request }) => {
     let sessionId = body.sessionId || "";
     let productId = body.productId;
     let token = body.token || "";
-    let storeUrl = body.storeUrl || ""; // Needed for Origin
+    let storeUrl = body.storeUrl || ""; // myshopify domain from frontend
     let newToken = null;
     let secret = body.uid || ""; // Secret key for HMAC verification
-    const storeDomain = new URL(storeUrl).hostname.split('.')[0]; // extract 'naga-tech-store'
+    // Extract subdomain for store_id (e.g., 'rajahmart-international' from 'rajahmart-international.myshopify.com')
+    const storeDomain = storeUrl.split('.')[0];
     var verified = false;
     const credentials = await getApiCredentials();
     const bearer_token = credentials?.token || null;
@@ -123,7 +124,8 @@ export const action = async ({ request }) => {
 
 
 async function fetchShopifyProducts(productIds, currency, storeUrl) {
-  const storeHostname = new URL(storeUrl).hostname; // Get full hostname like "distaxstaging.myshopify.com"
+  // Use the myshopify domain from the frontend
+  const storeHostname = storeUrl;
 
   const session = await prisma.session.findFirst({
     where: { shop: storeHostname },
@@ -192,7 +194,7 @@ async function fetchShopifyProducts(productIds, currency, storeUrl) {
 
   try {
     const response = await fetch(
-      `https://${session.shop}/admin/api/${apiVersion}/graphql.json`,
+      `https://${storeHostname}/admin/api/${apiVersion}/graphql.json`,
       requestOptions
     );
 
@@ -264,7 +266,8 @@ export const loader = async ({ request }) => {
   let newToken = null;
   let currency = url.searchParams.get("currency") || "USD"; // Default to USD if not provided
   let secret = url.searchParams.get("uid") || ""; // Secret key for HMAC verification
-  const storeDomain = new URL(storeUrl).hostname.split('.')[0];
+  // Extract subdomain for store_id (e.g., 'rajahmart-international' from 'rajahmart-international.myshopify.com')
+  const storeDomain = storeUrl.split('.')[0];
   const credentials = await getApiCredentials();
   const bearer_token = credentials?.token || null;
   const base_url = credentials?.baseUrl || null;
@@ -285,8 +288,7 @@ export const loader = async ({ request }) => {
 
   try {
     // Check if we have a valid session
-    const storeHostname = new URL(storeUrl).hostname; // Get full hostname like "distaxstaging.myshopify.com"
-
+    const storeHostname = storeUrl;
     const session = await prisma.session.findFirst({
       where: { shop: storeHostname },
       orderBy: { expires: "desc" },

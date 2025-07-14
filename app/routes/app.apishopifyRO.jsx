@@ -6,7 +6,8 @@ import crypto from "crypto";
 const prisma = new PrismaClient();
 
 async function fetchRecentlyOrderedProducts(customerId, currency, storeUrl) {
-  const storeHostname = new URL(storeUrl).hostname;
+  // Use the myshopify domain from the frontend
+  const storeHostname = storeUrl;
 
   const session = await prisma.session.findFirst({
     where: { shop: storeHostname },
@@ -18,7 +19,7 @@ async function fetchRecentlyOrderedProducts(customerId, currency, storeUrl) {
   }
 
   const adminAccessToken = session.accessToken;
-  const shopDomain = session.shop;
+  const shopDomain = storeHostname;
 
   // Use the latest API version
   const apiVersion = '2023-10';
@@ -217,9 +218,9 @@ export const loader = async ({ request }) => {
   }
 
   try {
-    // Check if we have a valid session
-    const storeHostname = new URL(storeUrl).hostname;
+    const storeHostname = storeUrl;
 
+    // Check if we have a valid session
     const session = await prisma.session.findFirst({
       where: { shop: storeHostname },
       orderBy: { expires: "desc" },
@@ -240,7 +241,7 @@ export const loader = async ({ request }) => {
       });
     }
 
-    const orderedProducts = await fetchRecentlyOrderedProducts(`gid://shopify/Customer/${customerId}`, currency, storeUrl);
+    const orderedProducts = await fetchRecentlyOrderedProducts(`gid://shopify/Customer/${customerId}`, currency, storeHostname);
 
     // Get the latest CSS settings
     const cssSettings = await prisma.customCSS_RO.findUnique({

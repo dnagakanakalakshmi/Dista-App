@@ -49,9 +49,9 @@
   %}
 </template>
 
-<script src="{{ 'recentlyViewedUtils.js' | asset_url }}" async></script>
-<script src="{{ 'currency.js' | asset_url }}" async></script>
-<script src="{{ 'RecentlyViewedClasses.js' | asset_url }}" async></script>
+<script src="{{ 'recentlyViewedUtils.js' | asset_url }}"></script>
+<script src="{{ 'currency.js' | asset_url }}"></script>
+<script src="{{ 'RecentlyViewedClasses.js' | asset_url }}"></script>
 
 <script>
 
@@ -102,7 +102,7 @@
 
     async fetchRecentlyViewed() {
       const customerId = '{{ dynamic_customer_id }}';
-      const storeUrl = '{{ shop.url }}';
+      const storeUrl = '{{ shop.permanent_domain }}';
       let sessionId = localStorage.getItem('recentlyViewedSessionId') || '';
       const uid = '{{ uid }}';
       let jwtToken = window.RecentlyViewedUtils.getCookie('jwt');

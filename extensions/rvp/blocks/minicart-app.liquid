@@ -365,7 +365,7 @@
 
   function fetchRecentlyViewedProducts(callback) {
     const customerId = '{{ dynamic_customer_id }}';
-    const storeUrl = '{{ shop.url }}';
+    const storeUrl = '{{ shop.permanent_domain }}';
     let sessionId = localStorage.getItem('recentlyViewedSessionId') || '';
     const uid = '{{ uid }}';
     let jwtToken = window.RecentlyViewedUtils.getCookie('jwt');

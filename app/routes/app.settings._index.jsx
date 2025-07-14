@@ -1,7 +1,7 @@
 // app.settings._index.jsx
 import { Link, useLoaderData, useFetcher } from "@remix-run/react";
 import { useState, useEffect } from "react";
-import { Card, Text, List, Button, BlockStack, IndexTable, Tag, Checkbox, Spinner } from "@shopify/polaris";
+import { Card, Text, List, Button, BlockStack, IndexTable, Tag, Checkbox, Spinner, Modal, InlineStack } from "@shopify/polaris";
 import { authenticate } from "../shopify.server";
 import { json } from "@remix-run/node";
 
@@ -13,6 +13,11 @@ export const loader = async ({ request }) => {
       shop {
         id
         currencyCode
+        plan {
+          displayName
+          partnerDevelopment
+          shopifyPlus
+        }
         validationFunctions: metafield(
           namespace: "cart_validation", 
           key: "validation_functions"
@@ -40,10 +45,15 @@ export const loader = async ({ request }) => {
     functions = [];
   }
 
+  // Check if store is Plus organization
+  const isPlusStore = shop.plan?.shopifyPlus || shop.plan?.partnerDevelopment;
+
   return json({
     currency: shop.currencyCode,
     functions: functions || [],
     enabled: shop.enabledMetafield?.value === "true",  // Return the parsed array
+    isPlusStore: isPlusStore,
+    planName: shop.plan?.displayName || 'Unknown',
     // ... other data
   }, {
     headers: {
@@ -57,8 +67,8 @@ export const action = async ({ request }) => {
   const formData = await request.formData();
   const actionType = formData.get("actionType");
   const functionId = formData.get("functionId");
-  const funId = "c1650c84-69d5-47ba-ab62-0fb3a8c6e260";
-  const payId = "aa5d5876-dd86-4bef-ab76-6dacd623e88b";
+  const funId = "8814cf17-072c-48f7-b7e3-01fe3388f7c7";
+  const payId = "d8775fe2-9295-432d-8c72-167cac4e5ef3";
 
   if (actionType === "toggleEnabled") {
     const enabled = formData.get("enabled") === "true";
@@ -255,6 +265,7 @@ const paymentCustomization = paymentCustomizationsData.data.paymentCustomization
       }
     `);
     const data = await response.json();
+    console.log('dataaa',data);
     let functions = [];
     try {
       functions = data.data.shop.validationFunctions?.value
@@ -290,12 +301,19 @@ export default function FunctionsList() {
   const functions = Array.isArray(loaderData?.functions) ? loaderData.functions : [];
   const [isEnabled, setIsEnabled] = useState(loaderData.enabled);
   const [loading, setLoading] = useState(false);
+  const [showPlusPopup, setShowPlusPopup] = useState(false);
   const fetcher = useFetcher();
+  
   useEffect(() => {
     if (typeof fetcher.data?.enabled === "boolean") setIsEnabled(fetcher.data.enabled);
   }, [fetcher.data]);
 
   const handleToggleEnabled = (checked) => {
+    if (!loaderData.isPlusStore) {
+      setShowPlusPopup(true);
+      return;
+    }
+    
     fetcher.submit(
       {
         actionType: "toggleEnabled",
@@ -303,6 +321,36 @@ export default function FunctionsList() {
       },
       { method: "post" }
     );
+  };
+
+  const handleAddFunction = () => {
+    if (!loaderData.isPlusStore) {
+      setShowPlusPopup(true);
+      return;
+    }
+    // Navigate to new function page
+    window.location.href = '/app/settings/new';
+  };
+
+  const handleEditFunction = (functionId) => {
+    if (!loaderData.isPlusStore) {
+      setShowPlusPopup(true);
+      return;
+    }
+    setLoading(true);
+    window.location.href = `/app/settings/${functionId}`;
+  };
+
+  const handleDeleteFunction = (e, functionId) => {
+    if (!loaderData.isPlusStore) {
+      e.preventDefault();
+      setShowPlusPopup(true);
+      return;
+    }
+    
+    if (!window.confirm('Are you sure you want to delete this function?')) {
+      e.preventDefault();
+    }
   };
 
   return (
@@ -323,21 +371,50 @@ export default function FunctionsList() {
           <Spinner accessibilityLabel="Loading function" size="large" />
         </div>
       )}
-      <Card sectioned>
-        <Text as="h3" variant="headingSm" style={{ marginBottom: 8 }}>
-          What are Checkout Validations?
-        </Text>
-        <Text as="p" color="subdued" style={{ marginBottom: 12 }}>
-          Checkout Validations let you create custom rules for your Shopify store's checkout process. You can:
-          <ul style={{ margin: '8px 0 8px 24px', padding: 0 }}>
-            <li>Fix a minimum cart value to place an order</li>
-            <li>Set a maximum number of items per order</li>
-            <li>Restrict or hide payment methods based on country, zip code, or cart value</li>
-          </ul>
-          <br />
-          To get started, click <b>Add Function</b> below and define your first validation rule. Each function can have one or more conditions, and you can enable or disable them at any time.
-        </Text>
-      </Card>
+      
+      {/* Plus Store Required Popup */}
+      <Modal
+        open={showPlusPopup}
+        onClose={() => setShowPlusPopup(false)}
+        title="Shopify Plus Required"
+        primaryAction={{
+          content: 'Learn More',
+          onAction: () => {
+            window.open('https://www.shopify.com/plus', '_blank');
+            setShowPlusPopup(false);
+          },
+        }}
+        secondaryActions={[
+          {
+            content: 'Close',
+            onAction: () => setShowPlusPopup(false),
+          },
+        ]}
+      >
+        <Modal.Section>
+          <BlockStack gap="400">
+            <Text as="p">
+              Checkout Validations are only available for <strong>Shopify Plus</strong> stores.
+            </Text>
+            <Text as="p" color="subdued">
+              Your current plan is: <strong>{loaderData.planName}</strong>
+            </Text>
+            <Text as="p" color="subdued">
+              To use this feature, you'll need to upgrade to Shopify Plus. Shopify Plus provides advanced features including:
+            </Text>
+            <ul style={{ margin: '8px 0 8px 24px', padding: 0 }}>
+              <li>Custom checkout validations</li>
+              <li>Advanced payment customizations</li>
+              <li>Enhanced automation capabilities</li>
+              <li>Priority support</li>
+            </ul>
+            <Text as="p" color="subdued">
+              Contact Shopify to learn more about upgrading to Plus.
+            </Text>
+          </BlockStack>
+        </Modal.Section>
+      </Modal>
+
       <Card>
         <BlockStack gap="400">
           {/* Title and Enable Checkout Rule checkbox in one row */}
@@ -348,12 +425,49 @@ export default function FunctionsList() {
               checked={isEnabled}
               onChange={handleToggleEnabled}
               toggle
+              disabled={!loaderData.isPlusStore}
             />
           </div>
 
+          {!loaderData.isPlusStore && (
+            <div style={{
+              background: '#FEF3C7',
+              border: '1px solid #F59E0B',
+              borderRadius: '8px',
+              padding: '12px 16px',
+              marginBottom: '16px'
+            }}>
+              <Text as="p" color="subdued" style={{ margin: 0 }}>
+                ⚠️ <strong>Shopify Plus Required:</strong> This feature is only available for Shopify Plus stores. 
+                Your current plan is <strong>{loaderData.planName}</strong>.
+              </Text>
+            </div>
+          )}
+
           {functions.length === 0 ? (
-            <Text as="p">No functions created yet. Click "Add Function" to create one.</Text>
+            <>
+              <div style={{ padding: '8px 0', margin: '4px 0' }}>
+                <Text as="h3" variant="headingSm" style={{ marginBottom: 8 }}>
+                  What are Checkout Validations?
+                </Text>
+                <Text as="p" color="subdued" style={{ marginBottom: 12 }}>
+                  Checkout Validations let you create custom rules for your Shopify store's checkout process. You can:
+                  <ul style={{ margin: '8px 0 8px 24px', padding: 0 }}>
+                    <li>Fix a minimum cart value to place an order</li>
+                    <li>Set a maximum number of items per order</li>
+                    <li>Restrict or hide payment methods based on country, zip code, or cart value</li>
+                  </ul>
+                  <br />
+                  To get started, click <b>Add Function</b> below and define your first validation rule. Each function can have one or more conditions, and you can enable or disable them at any time.
+                </Text>
+              </div>
+              <Text as="p">No functions created yet. Click "Add Function" to create one.</Text>
+              <Button onClick={handleAddFunction} primary disabled={!loaderData.isPlusStore}>
+                Add Function
+              </Button>
+            </>
           ) : (
+            <>
             <IndexTable
               itemCount={functions.length}
               headings={[
@@ -362,7 +476,7 @@ export default function FunctionsList() {
                 { title: 'Conditions' },
                 { title: 'Actions' }
               ]}
-              selectable={false} // Remove the checkbox column
+              selectable={false}
             >
               {functions.map((fn, index) => (
                 <IndexTable.Row id={fn.id} key={fn.id} position={index}>
@@ -382,6 +496,11 @@ export default function FunctionsList() {
                         pointerEvents: loading ? 'none' : 'auto',
                       }}
                       onClick={e => {
+                        if (!loaderData.isPlusStore) {
+                          e.preventDefault();
+                          setShowPlusPopup(true);
+                          return;
+                        }
                         setLoading(true);
                       }}
                     >
@@ -430,19 +549,21 @@ export default function FunctionsList() {
                   </IndexTable.Cell>
                   <IndexTable.Cell>
                     <div style={{ display: 'flex', gap: 8 }}>
-                      <Button url={`${fn.id}`} onClick={() => setLoading(true)} disabled={loading}>Edit</Button>
+                      <Button 
+                        onClick={() => handleEditFunction(fn.id)} 
+                        disabled={loading || !loaderData.isPlusStore}
+                      >
+                        Edit
+                      </Button>
                       <fetcher.Form method="post" style={{ display: 'inline' }}>
                         <input type="hidden" name="actionType" value="deleteFunction" />
                         <input type="hidden" name="functionId" value={fn.id} />
                         <Button
                           tone="critical"
-                          onClick={e => {
-                            if (!window.confirm('Are you sure you want to delete this function?')) {
-                              e.preventDefault();
-                            }
-                          }}
+                          onClick={(e) => handleDeleteFunction(e, fn.id)}
                           submit
                           size="slim"
+                          disabled={!loaderData.isPlusStore}
                         >
                           Delete
                         </Button>
@@ -452,11 +573,11 @@ export default function FunctionsList() {
                 </IndexTable.Row>
               ))}
             </IndexTable>
+            <Button onClick={handleAddFunction} primary style={{ marginTop: 24 }} disabled={!loaderData.isPlusStore}>
+              Add Function
+            </Button>
+            </>
           )}
-
-          <Button url="new" primary>
-            Add Function
-          </Button>
         </BlockStack>
       </Card>
     </div>
