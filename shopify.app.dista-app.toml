@@ -6,11 +6,6 @@ embedded = true
 name = "Dista App - Rajah Ayurveda"
 handle = "dista-app-rajah-ayurveda"
 
-[build]
-automatically_update_urls_on_dev = true
-dev_store_url = "distaxstaging.myshopify.com"
-include_config_on_deploy = true
-
 [webhooks]
 api_version = "2025-07"
 
@@ -40,3 +35,6 @@ prefix = "a"
 
 [pos]
 embedded = false
+
+[build]
+include_config_on_deploy = true
